@@ -50,8 +50,25 @@ class Mkgroups
       create_group group,'All Nodes',info['classes'],info['rules'],info['children']
     end
   end
+
+  def sort_groups groups
+    @sorted_groups ||= []
+    return if groups == {}
+    groups.each do |group,params|
+      if params['children'] == {}
+        @sorted_groups << group
+      else
+        sort_groups params['children']
+        @sorted_groups << group
+      end
+    end
+  end
+
+  def delete_groups groups
+    sort_groups groups
+    @sorted_groups.each do |group|
+      @puppetclassify.groups.delete_group @puppetclassify.groups.get_group_id(group)
+    end
+  end
+
 end
-
-mkgroups = Mkgroups.new
-mkgroups.create_groups_from_file 'groups.yaml'
-
