@@ -1,6 +1,6 @@
 require 'yaml'
 
-class Mkgroups::Gengroups
+class Gentree
   # Generate an array of NC rules with a random number of rules up to max_rules
   def gen_rules max_rules=30
     rules = []
